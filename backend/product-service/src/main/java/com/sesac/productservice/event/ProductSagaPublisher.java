@@ -23,7 +23,7 @@ public class ProductSagaPublisher {
     
     // 재고 차감 성공 시 -> 결제 요청 이벤트 발행
     public void publishPaymentRequest(PaymentRequestEvent event) {
-        log.info("결제 요청 이벤트 발행 - orderId: {}, amount: {}", event.getOrderId(), event.getTotlaAmount());
+        log.info("결제 요청 이벤트 발행 - orderId: {}, amount: {}", event.getOrderId(), event.getTotalAmount());
         rabbitTemplate.convertAndSend(exchange, paymentRequestRoutingKey, event);
         log.info("결제 요청 이벤트 발행 완료");
     }
