@@ -4,7 +4,7 @@ spring:
   application:
     name: order-service
   datasource:
-    url: jdbc:mysql://localhost:3307/order_service_db
+    url: jdbc:mysql://mysql:3306/order_service_db
 
 # User Service 호출에 대한 회복성 패턴
 resilience4j:
@@ -33,6 +33,9 @@ management:
   endpoint:
     health:
       show-details: always
+      probes: 
+        enabled: true
   health:
     circuitbreakers:
       enabled: true
+

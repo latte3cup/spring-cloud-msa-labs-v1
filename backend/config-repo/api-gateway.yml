@@ -33,3 +33,7 @@ management:
   tracing:
     propagation:
       type: w3c
+  endpoint:
+    health:
+      probes:
+        enabled: true

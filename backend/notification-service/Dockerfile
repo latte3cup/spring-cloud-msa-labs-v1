@@ -1,32 +1,31 @@
-# Multi-stage build for Notification Service
+# Notification Service — Dockerfile (EKS용, 권장)
+# 1) Build stage
 FROM gradle:8.5-jdk17 AS build
-
 WORKDIR /app
-COPY build.gradle settings.gradle ./
+
+# 캐시 최적화: 의존성 먼저
+COPY settings.gradle build.gradle gradle.properties ./
+COPY gradle gradle
+COPY gradlew ./
+RUN chmod +x gradlew && ./gradlew dependencies --no-daemon || true
+
+# 소스 복사 후 빌드
 COPY src ./src
+RUN ./gradlew clean bootJar -x test --no-daemon
 
-# Build the application
-RUN gradle build -x test --no-daemon
-
+# 2) Runtime stage
 FROM eclipse-temurin:17-jre-jammy
-
 WORKDIR /app
 
-# Copy the built jar file
-COPY --from=build /app/build/libs/*.jar app.jar
+# 빌드 결과 복사 (JAR 이름에 맞게 수정)
+ARG JAR_FILE=/app/build/libs/*.jar
+COPY --from=build ${JAR_FILE} /app/app.jar
 
-# Create non-root user
-RUN groupadd -r notificationservice && useradd -r -g notificationservice notificationservice
+# non-root 사용자 생성 및 권한 설정
+RUN groupadd -r notification && useradd -r -g notification notification \
+ && chown -R notification:notification /app
+USER notification
 
-# Install curl for health check
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
-
-USER notificationservice
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost:8085/actuator/health || exit 1
-
+# K8s에서 Probe를 쓰므로 Docker HEALTHCHECK 제거
 EXPOSE 8085
-
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /app/app.jar"]

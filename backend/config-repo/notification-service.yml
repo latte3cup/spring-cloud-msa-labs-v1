@@ -3,3 +3,9 @@ server:
 spring:
   application:
     name: notification-service
+
+management: 
+  endpoint: 
+    health:
+      probes: 
+        enabled: true

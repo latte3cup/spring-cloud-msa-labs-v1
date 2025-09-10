@@ -4,4 +4,9 @@ spring:
   application:
     name: product-service
   datasource:
-    url: jdbc:mysql://localhost:3307/product_service_db
+    url: jdbc:mysql://mysql:3307/product_service_db
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
