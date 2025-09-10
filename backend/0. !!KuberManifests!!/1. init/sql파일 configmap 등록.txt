@@ -1,0 +1,5 @@
+kubectl create configmap mysql-init \
+  --from-file=./01-create-databases.sql \
+  --from-file=./02-create-tables.sql \
+  --from-file=./03-insert-sample-data.sql \
+  -n msa
