@@ -15,12 +15,12 @@ spec:
     spec:
       containers:
         - name: eureka-server
-          image: <ACCOUNT_ID>.dkr.ecr.ap-northeast-2.amazonaws.com/eureka-server:1.0.0
+          image: 857360183365.dkr.ecr.ap-northeast-2.amazonaws.com/eureka-server:ojg
           ports:
             - containerPort: 8761
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: "eks"                # docker 대신 eks(권장)
+              value: "eks" # docker 대신 eks(권장)
             - name: SPRING_CONFIG_IMPORT
               value: "configserver:http://config-server:8888"
             - name: JAVA_OPTS

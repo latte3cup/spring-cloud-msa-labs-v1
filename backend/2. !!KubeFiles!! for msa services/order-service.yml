@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: order-service
-          image: <ACCOUNT_ID>.dkr.ecr.ap-northeast-2.amazonaws.com/order-service:TAG
+          image: 857360183365.dkr.ecr.ap-northeast-2.amazonaws.com/order-service:ojg
           ports:
             - containerPort: 8083
           env:

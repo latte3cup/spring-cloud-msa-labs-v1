@@ -4,7 +4,7 @@ FROM gradle:8.5-jdk17 AS build
 WORKDIR /app
 
 # 캐시 최적화: 의존성 관련 파일 먼저
-COPY build.gradle settings.gradle gradle.properties ./
+COPY build.gradle settings.gradle ./
 COPY gradle gradle
 COPY gradlew ./
 RUN chmod +x gradlew && ./gradlew dependencies --no-daemon || true

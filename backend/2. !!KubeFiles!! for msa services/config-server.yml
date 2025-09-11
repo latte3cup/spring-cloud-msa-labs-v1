@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: config-server
-          image: <ACCOUNT_ID>.dkr.ecr.ap-northeast-2.amazonaws.com/config-server:1.0.0
+          image: 857360183365.dkr.ecr.ap-northeast-2.amazonaws.com/config-server:ojg
           ports:
             - containerPort: 8888
           env:
