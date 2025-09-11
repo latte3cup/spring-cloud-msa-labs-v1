@@ -18,10 +18,10 @@ WORKDIR /app
 
 # 빌드 결과 복사
 ARG JAR_FILE=/app/build/libs/*SNAPSHOT.jar
-COPY --from=build ${JAR_FILE} /app/app.jar
+COPY --from=build ${JAR_FILE} /app/app.jar  
 
 # config-repo 폴더 포함 (Native 모드 사용 시)
-COPY ../config-repo /config-repo
+COPY ./config-repo /config-repo
 
 # 비루트 사용자
 RUN groupadd -r configserver && useradd -r -g configserver configserver \
