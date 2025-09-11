@@ -25,19 +25,22 @@ spec:
               value: "no"
             - name: TZ
               value: "Asia/Seoul"
-          args: # Docker Compose의 command 매핑
+          args:
             - "--character-set-server=utf8mb4"
             - "--collation-server=utf8mb4_unicode_ci"
             - "--skip-character-set-client-handshake"
           volumeMounts:
             - name: mysql-data
               mountPath: /var/lib/mysql
-            - name: "mysql-init" # configmap에서 Sql 파일들 init으로 적용
+            - name: mysql-init # <- volumeMount 이름
               mountPath: /docker-entrypoint-initdb.d
               readOnly: true
       volumes:
         - name: mysql-data
           emptyDir: {} # 운영에서는 PVC 사용
+        - name: mysql-init # <- volume 정의 추가
+          configMap:
+            name: mysql-init # <- kubectl create configmap mysql-init ... 로 만든 이름
 ---
 apiVersion: v1
 kind: Service
