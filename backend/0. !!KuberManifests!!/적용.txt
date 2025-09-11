@@ -1,0 +1,3 @@
+kubectl apply -f Infra_Mysql.yml -n msa
+kubectl apply -f Infra_RabbitMQ.yml -n msa
+kubectl apply -f Infra_Zipkin.yml -n msa

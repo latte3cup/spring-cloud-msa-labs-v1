@@ -32,7 +32,7 @@ spec:
           volumeMounts:
             - name: mysql-data
               mountPath: /var/lib/mysql
-            - name: mysql-initdb          # configmap에서 Sql 파일들 init으로 적용
+            - name: mysql-init # configmap에서 Sql 파일들 init으로 적용
               mountPath: /docker-entrypoint-initdb.d
               readOnly: true
       volumes:
