@@ -1,0 +1,29 @@
+
+set AWS_REGION=ap-northeast-2
+set AWS_ACCOUNT_ID=857360183365
+set TAG=ojg
+
+echo Logging into ECR...
+aws ecr get-login-password --region %AWS_REGION% | docker login --username AWS --password-stdin %AWS_ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com
+
+
+
+docker build -t %AWS_ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com/api-gateway:%TAG% ./api-gateway
+docker build -t %AWS_ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com/config-server:%TAG% ./config-server
+docker build -t %AWS_ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com/eureka-server:%TAG% ./eureka-server
+docker build -t %AWS_ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com/notification-service:%TAG% ./notification-service
+docker build -t %AWS_ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com/order-service:%TAG% ./order-service
+docker build -t %AWS_ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com/payment-service:%TAG% ./payment-service
+docker build -t %AWS_ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com/product-service:%TAG% ./product-service
+docker build -t %AWS_ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com/user-service:%TAG% ./user-service
+
+
+docker push %AWS_ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com/api-gateway:%TAG%
+docker push %AWS_ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com/config-server:%TAG%
+docker push %AWS_ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com/eureka-server:%TAG%
+docker push %AWS_ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com/notification-service:%TAG%
+docker push %AWS_ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com/order-service:%TAG%
+docker push %AWS_ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com/payment-service:%TAG%
+docker push %AWS_ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com/product-service:%TAG%
+docker push %AWS_ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com/user-service:%TAG%
+
