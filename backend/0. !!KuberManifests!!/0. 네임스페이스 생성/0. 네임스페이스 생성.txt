@@ -1,8 +1,0 @@
-kubectl create namespace msa
-
-kubectl get namespaces
-
-kubectl config set-context --current --namespace=msa
-
-
-kubectl describe configmap mysql-init -n msa
