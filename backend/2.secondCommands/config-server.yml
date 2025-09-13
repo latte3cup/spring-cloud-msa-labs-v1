@@ -16,6 +16,7 @@ spec:
       containers:
         - name: config-server
           image: 857360183365.dkr.ecr.ap-northeast-2.amazonaws.com/config-server:ojg
+          imagePullPolicy: Always
           ports:
             - containerPort: 8888
           env:

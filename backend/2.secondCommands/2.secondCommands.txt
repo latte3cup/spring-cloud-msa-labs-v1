@@ -9,3 +9,6 @@ kubectl apply -f product-service.yml
 kubectl apply -f user-service.yml
 
 kubectl port-forward svc/config-server -n msa 8888:8888
+
+
+kubectl describe pod/notification-service-67c7f994f5-4x6l6  -n msa

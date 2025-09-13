@@ -18,6 +18,7 @@ spec:
       containers:
         - name: api-gateway
           image: 857360183365.dkr.ecr.ap-northeast-2.amazonaws.com/api-gateway:ojg
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:

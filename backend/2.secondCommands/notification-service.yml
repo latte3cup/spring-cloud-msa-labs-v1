@@ -18,6 +18,7 @@ spec:
       containers:
         - name: notification-service
           image: 857360183365.dkr.ecr.ap-northeast-2.amazonaws.com/notification-service:ojg
+          imagePullPolicy: Always
           ports:
             - containerPort: 8085
           env:

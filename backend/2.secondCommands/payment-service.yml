@@ -32,6 +32,7 @@ spec:
       containers:
         - name: payment-service
           image: 857360183365.dkr.ecr.ap-northeast-2.amazonaws.com/payment-service:ojg
+          imagePullPolicy: Always
           ports:
             - containerPort: 8085
           env:

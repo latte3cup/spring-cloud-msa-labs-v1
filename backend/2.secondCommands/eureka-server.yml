@@ -16,6 +16,7 @@ spec:
       containers:
         - name: eureka-server
           image: 857360183365.dkr.ecr.ap-northeast-2.amazonaws.com/eureka-server:ojg
+          imagePullPolicy: Always
           ports:
             - containerPort: 8761
           env:
