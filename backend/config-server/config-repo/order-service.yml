@@ -25,17 +25,5 @@ resilience4j:
         wait-duration: 1s
 
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health, info, circuitbreakers, circuitbreakerevents
-  endpoint:
-    health:
-      show-details: always
-      probes: 
-        enabled: true
-  health:
-    circuitbreakers:
-      enabled: true
+
 

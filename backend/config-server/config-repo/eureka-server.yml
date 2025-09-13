@@ -14,8 +14,3 @@ eureka:
 
 
 ## 밑에 추가.
-management: 
-  endpoint: 
-    health:
-      probes: 
-        enabled: true
