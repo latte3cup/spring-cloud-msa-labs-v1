@@ -20,7 +20,7 @@ spec:
           image: 857360183365.dkr.ecr.ap-northeast-2.amazonaws.com/notification-service:ojg
           imagePullPolicy: Always
           ports:
-            - containerPort: 8085
+            - containerPort: 8084
           env:
             - name: SPRING_APPLICATION_NAME
               value: "notification-service"
@@ -45,14 +45,14 @@ spec:
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 8085
+              port: 8084
             initialDelaySeconds: 15
             periodSeconds: 10
             failureThreshold: 3
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 8085
+              port: 8084
             initialDelaySeconds: 60
             periodSeconds: 20
             failureThreshold: 3
