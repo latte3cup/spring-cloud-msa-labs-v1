@@ -3,13 +3,16 @@ kind: Ingress
 metadata:
   name: api-gateway-ingress
   namespace: msa
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
 spec:
-  ingressClassName: nginx
+  ingressClassName: alb
   rules:
-    - host: api.ojg.com
-      http:
+    - http:
         paths:
-          - path: /api
+          - path: /api/*
             pathType: Prefix
             backend:
               service:
