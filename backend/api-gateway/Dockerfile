@@ -1,32 +1,25 @@
-# Multi-stage build for API Gateway
+# ---- Build stage ----
 FROM gradle:8.5-jdk17 AS build
-
 WORKDIR /app
-COPY build.gradle settings.gradle ./
+
+COPY settings.gradle build.gradle ./ 
+COPY gradle gradle
+COPY gradlew ./ 
+RUN chmod +x gradlew && ./gradlew dependencies --no-daemon || true
+
 COPY src ./src
+RUN ./gradlew clean bootJar -x test --no-daemon
 
-# Build the application
-RUN gradle build -x test --no-daemon
-
+# ---- Runtime stage ----
 FROM eclipse-temurin:17-jre-jammy
-
 WORKDIR /app
 
-# Copy the built jar file
-COPY --from=build /app/build/libs/*.jar app.jar
+# JAR 복사 (SNAPSHOT jar 패턴)
+COPY --from=build /app/build/libs/*SNAPSHOT.jar /app/app.jar
 
-# Create non-root user
-RUN groupadd -r apigateway && useradd -r -g apigateway apigateway
-
-# Install curl for health check
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
-
+RUN groupadd -r apigateway && useradd -r -g apigateway apigateway \
+ && chown -R apigateway:apigateway /app
 USER apigateway
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost:8080/actuator/health || exit 1
-
 EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /app/app.jar"]

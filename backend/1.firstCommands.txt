@@ -1,0 +1,31 @@
+kubectl create namespace msa
+
+kubectl get namespaces
+
+kubectl config set-context --current --namespace=msa
+
+
+cd backend/1.firstCommands
+kubectl create configmap mysql-init \
+  --from-file=./01-create-databases.sql \
+  --from-file=./02-create-tables.sql \
+  --from-file=./03-insert-sample-data.sql \
+  -n msa
+
+kubectl describe configmap mysql-init -n msa
+
+
+kubectl apply -f Infra_Mysql.yml -n msa
+kubectl apply -f Infra_RabbitMQ.yml -n msa
+kubectl apply -f Infra_Zipkin.yml -n msa
+cd ../..
+
+kubectl create secret generic order-db-secret \
+  --from-literal=DB_USER=root \
+  --from-literal=DB_PASS=123qwe \
+  -n msa
+
+kubectl create secret generic rabbitmq-secret \
+  --from-literal=username=admin \
+  --from-literal=password=admin123 \
+  -n msa

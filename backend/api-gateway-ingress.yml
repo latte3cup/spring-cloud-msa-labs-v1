@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-gateway-ingress
+  namespace: msa
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing   # ALB를 외부 공개로
+    alb.ingress.kubernetes.io/target-type: ip          # Pod IP 직접 연결
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: api-gateway
+                port:
+                  number: 8080

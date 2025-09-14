@@ -1,0 +1,9 @@
+server:
+  port: 8085
+spring:
+  application:
+    name: payment-service
+  datasource:
+    url: jdbc:mysql://mysql:3306/payment_service_db
+
+

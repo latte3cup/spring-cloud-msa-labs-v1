@@ -1,0 +1,107 @@
+# 1) Secret: payment-credentials
+apiVersion: v1
+kind: Secret
+metadata:
+  name: payment-credentials
+  namespace: msa
+type: Opaque
+stringData:
+  DB_USER: "root"
+  DB_PASS: "123qwe"
+  RABBITMQ_USER: "admin"
+  RABBITMQ_PASS: "admin123"
+---
+# 2) Deployment: payment-service (Secret 참조)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-service
+  namespace: msa
+  labels:
+    app: payment-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: payment-service
+  template:
+    metadata:
+      labels:
+        app: payment-service
+    spec:
+      containers:
+        - name: payment-service
+          image: 857360183365.dkr.ecr.ap-northeast-2.amazonaws.com/payment-service:ojg
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8085
+          env:
+            - name: SPRING_APPLICATION_NAME
+              value: "payment-service"
+            - name: SPRING_PROFILES_ACTIVE
+              value: "eks"
+            - name: SPRING_CONFIG_IMPORT
+              value: "configserver:http://config-server:8888"
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mysql://mysql:3306/payment_service_db"
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: payment-credentials
+                  key: DB_USER
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: payment-credentials
+                  key: DB_PASS
+            - name: SPRING_RABBITMQ_HOST
+              value: "rabbitmq"
+            - name: SPRING_RABBITMQ_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: payment-credentials
+                  key: RABBITMQ_USER
+            - name: SPRING_RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: payment-credentials
+                  key: RABBITMQ_PASS
+            - name: JAVA_OPTS
+              value: "-XX:MaxRAMPercentage=70 -Xms128m -Duser.timezone=Asia/Seoul"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8085
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8085
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+---
+# 3) Service: payment-service
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-service
+  namespace: msa
+  labels:
+    app: payment-service
+spec:
+  selector:
+    app: payment-service
+  ports:
+    - port: 8085
+      targetPort: 8085
+  type: ClusterIP
