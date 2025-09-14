@@ -1,4 +1,4 @@
-const API_BASE_URL = '/api';
+const API_BASE_URL = 'http://k8s-msa-apigatew-20fa17e41c-130351073.ap-northeast-2.elb.amazonaws.com/api';
 
 export async function apiRequest<T>(
   endpoint: string,
