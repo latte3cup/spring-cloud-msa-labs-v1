@@ -11,4 +11,8 @@ kubectl apply -f user-service.yml
 kubectl port-forward svc/config-server -n msa 8888:8888
 
 
-kubectl describe pod/notification-service-67c7f994f5-4x6l6  -n msa
+kubectl logs pod/notification-service-67d486db5-p2hqx  -n msa
+
+kubectl delete -f notification-service.yaml
+curl http://localhost:8888/notification-service/default,eks,docker
+kubectl exec -n msa config-server-6bd8c9cd9-qcfxs  -- ls /config-repo

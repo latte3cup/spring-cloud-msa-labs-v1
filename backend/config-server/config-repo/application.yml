@@ -47,12 +47,17 @@ management:
     web:
       exposure:
         include: health,info,metrics,tracing
+  endpoint:
+    health:
+      probes:
+        enabled: true
   tracing:
     sampling:
-      probability: 0.5  # Docker 환경에서 성능 최적화
+      probability: 0.5
   zipkin:
     tracing:
       endpoint: http://zipkin:9411/api/v2/spans
+
 
 # OpenTelemetry 설정
 otel:
@@ -108,20 +113,3 @@ datasource:
       max-lifetime: 1800000
 
 
-
-## 쿠버용 헬스체크 적용
-management: 
-  endpoint: 
-    health:
-      probes: 
-        enabled: true
-        
-# 아래는 로컬전용 롤링 업데이트로 인해 헬스체크의 일관성이 적용되지 않음.
-# management:
-#   endpoints:
-#     web:
-#       exposure:
-#         include: health, info, refresh
-#   endpoint:
-#     refresh:
-#       enabled: true
