@@ -8,10 +8,12 @@ kubectl apply -f payment-service.yml
 kubectl apply -f product-service.yml
 kubectl apply -f user-service.yml
 
+
+
 kubectl port-forward svc/config-server -n msa 8888:8888
 
 
-kubectl logs pod/notification-service-67d486db5-p2hqx  -n msa
+kubectl logs pod/notification-service-67d486db5-sjc2h  -n msa
 
 kubectl delete -f notification-service.yaml
 curl http://localhost:8888/notification-service/default,eks,docker
